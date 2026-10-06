@@ -5,12 +5,13 @@ import (
 	"fmt"
 
 	"daniellov.com/health-monitor/internal/ping"
+	"daniellov.com/health-monitor/internal/types"
 )
 
 type Monitor struct {
 	id       int64
 	endpoint string
-	history  []ping.Result
+	history  []types.Result
 }
 
 var id int64 = 0
@@ -29,18 +30,18 @@ func New(endpoint string) (*Monitor, bool) {
 }
 
 // return value: error
-func (m *Monitor) Run() (ping.Result, bool) {
+func (m *Monitor) Run() (types.Result, bool) {
 	result, err := ping.CheckEndpoint(m.endpoint)
 
 	fmt.Printf("monitor (%d) @ (%v): [%s] %s in %d ms, err: %v \n", m.id, result.Timestamp, result.Status, result.Endpoint, result.LatencyMs, result.Err)
 	if err {
-		return ping.Result{}, true
+		return types.Result{}, true
 	}
 
 	m.history = append(m.history, result)
 	return result, false
 }
 
-func (m *Monitor) History() []ping.Result {
+func (m *Monitor) History() []types.Result {
 	return m.history
 }

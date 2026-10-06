@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"daniellov.com/health-monitor/internal/ping"
+	"daniellov.com/health-monitor/internal/types"
 )
 
 type EventLogger struct {
@@ -13,13 +13,6 @@ type EventLogger struct {
 	encoder *json.Encoder
 	file    *os.File
 	history []string
-}
-
-type PingResult struct {
-	Endpoint  string
-	Status    string
-	LatencyMs int64
-	Err       string
 }
 
 var LOG_FILE = "event_logs.json"
@@ -50,7 +43,7 @@ func New(filename string) (*EventLogger, bool) {
 	return &event_logger, false
 }
 
-func (e *EventLogger) Write(message ping.Result) bool {
+func (e *EventLogger) Write(message types.Result) bool {
 	json, err := json.Marshal(message)
 	fmt.Printf("event logger (%d): %s \n", e.id, json)
 	err = e.encoder.Encode(message)

@@ -6,7 +6,7 @@ import (
 
 	"daniellov.com/health-monitor/internal/event_logger"
 	"daniellov.com/health-monitor/internal/monitor"
-	"daniellov.com/health-monitor/internal/ping"
+	"daniellov.com/health-monitor/internal/types"
 )
 
 func main() {
@@ -40,7 +40,7 @@ func main() {
 	defer logger.Clean()
 
 	var wg sync.WaitGroup
-	results := make(chan ping.Result, len(endpoints))
+	results := make(chan types.Result, len(endpoints))
 
 	for _, mon := range monitors {
 		wg.Add(1)

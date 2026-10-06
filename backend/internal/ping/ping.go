@@ -4,20 +4,14 @@ import (
 	"net/http"
 	"sync"
 	"time"
+
+	"daniellov.com/health-monitor/internal/types"
 )
 
-type Result struct {
-	Endpoint  string
-	Status    string
-	LatencyMs int64
-	Timestamp time.Time
-	Err       error
-}
-
 // result val: result, error
-func CheckEndpoint(endpoint string) (Result, bool) {
+func CheckEndpoint(endpoint string) (types.Result, bool) {
 	var wg sync.WaitGroup
-	results := make(chan Result, len(endpoint))
+	results := make(chan types.Result, len(endpoint))
 
 	wg.Add(1)
 	go runEndpoint(endpoint, &wg, results)
@@ -25,7 +19,7 @@ func CheckEndpoint(endpoint string) (Result, bool) {
 	wg.Wait()
 	close(results)
 
-	var return_val Result
+	var return_val types.Result
 
 	for result := range results {
 		return_val = result
@@ -35,10 +29,10 @@ func CheckEndpoint(endpoint string) (Result, bool) {
 }
 
 // result val: result, error
-func CheckAll(endpoints []string) ([]Result, bool) {
+func CheckAll(endpoints []string) ([]types.Result, bool) {
 
 	var wg sync.WaitGroup
-	results := make(chan Result, len(endpoints))
+	results := make(chan types.Result, len(endpoints))
 
 	for _, url := range endpoints {
 		wg.Add(1)
@@ -48,7 +42,7 @@ func CheckAll(endpoints []string) ([]Result, bool) {
 	wg.Wait()
 	close(results)
 
-	var return_val []Result
+	var return_val []types.Result
 
 	for result := range results {
 		return_val = append(return_val, result)
@@ -57,7 +51,7 @@ func CheckAll(endpoints []string) ([]Result, bool) {
 	return return_val, false
 }
 
-func runEndpoint(url string, wg *sync.WaitGroup, results chan<- Result) {
+func runEndpoint(url string, wg *sync.WaitGroup, results chan<- types.Result) {
 	defer wg.Done()
 
 	client := http.Client{Timeout: 5 * time.Second}
@@ -67,7 +61,7 @@ func runEndpoint(url string, wg *sync.WaitGroup, results chan<- Result) {
 	latency := time.Since(start).Milliseconds()
 
 	if err != nil {
-		results <- Result{
+		results <- types.Result{
 			Endpoint:  url,
 			Status:    "DOWN",
 			LatencyMs: latency,
@@ -85,7 +79,7 @@ func runEndpoint(url string, wg *sync.WaitGroup, results chan<- Result) {
 		status = "DOWN"
 	}
 
-	results <- Result{
+	results <- types.Result{
 		Endpoint:  url,
 		Status:    status,
 		LatencyMs: latency,

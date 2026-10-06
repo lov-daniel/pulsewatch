@@ -1,0 +1,45 @@
+{
+    "Endpoint": "https://fakeurl.com",
+    "Status": "DOWN",
+    "LatencyMs": 14,
+    "Timestamp": "2026-10-01T11:26:55.653742038-07:00",
+    "Err": {
+        "Op": "Get",
+        "URL": "https://fakeurl.com",
+        "Err": {
+            "Op": "dial",
+            "Net": "tcp",
+            "Source": null,
+            "Addr": null,
+            "Err": {
+                "Err": "no such host",
+                "Name": "fakeurl.com",
+                "Server": "10.255.255.254:53",
+                "IsTimeout": false,
+                "IsTemporary": false,
+                "IsNotFound": true
+            }
+        }
+    }
+}
+{
+    "Endpoint": "https://www.caida.org",
+    "Status": "UP",
+    "LatencyMs": 43,
+    "Timestamp": "2026-10-01T11:26:55.653911997-07:00",
+    "Err": null
+}
+{
+    "Endpoint": "https://www.google.com",
+    "Status": "UP",
+    "LatencyMs": 69,
+    "Timestamp": "2026-10-01T11:26:55.653769974-07:00",
+    "Err": null
+}
+{
+    "Endpoint": "https://www.daniellov.com",
+    "Status": "UP",
+    "LatencyMs": 118,
+    "Timestamp": "2026-10-01T11:26:55.653968243-07:00",
+    "Err": null
+}
