@@ -45,3 +45,7 @@ func (m *Monitor) Run() (types.Result, bool) {
 func (m *Monitor) History() []types.Result {
 	return m.history
 }
+
+func (m *Monitor) Id() int64 {
+	return m.id
+}
